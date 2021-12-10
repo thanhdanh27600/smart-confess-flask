@@ -1,5 +1,5 @@
 gensim==1.0.0
-tensorflow-cpu==2.4.4
+tensorflow-cpu==2.5.0
 underthesea==1.0.0
 keras==1.0.0
 Flask==1.1.2
