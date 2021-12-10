@@ -173,6 +173,3 @@ def predict():
     # return a response in json format
     return flask.json.dumps(data, ensure_ascii=False)
 
-
-# start the flask app, allow remote connections
-app.run()
