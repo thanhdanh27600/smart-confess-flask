@@ -105,36 +105,25 @@ def loadData(df):
     return texts, labels
 
 
-if __name__ == '__main__':
-    dataframe = loadDataFromCSV()
-    texts, labels = loadData(dataframe)
-    tokenizer, word_index = txtTokenizer(texts)
-
-    # put the tokens in a matrix
-    X = tokenizer.texts_to_sequences(texts)
-    X = pad_sequences(X, maxlen=500)
-
-    # prepare the labels
-    Y = pd.get_dummies(labels)
-
-    file = open(data_folder + sep + "data_" + model_version + ".pkl", 'rb')
-    X, Y, texts = pickle.load(file)
-    file.close()
-
-    # Split train an test sets
-    X_train, X_test, Y_train, Y_test = train_test_split(
-        X, Y, test_size=0.1, shuffle=True)
-
-    # train Word2Vec model on our data
-
-    # word_model = gensim.models.Word2Vec.load(
-    #     data_folder + sep + "word_model_" + model_version + ".save")
-    model = load_model(data_folder + sep +
-                       "predict_model_" + model_version + ".save")
-
-    # Test model
-    file = open(data_folder + sep + "My_data.txt", "r", encoding="utf8")
-
+dataframe = loadDataFromCSV()
+texts, labels = loadData(dataframe)
+tokenizer, word_index = txtTokenizer(texts)
+# put the tokens in a matrix
+X = tokenizer.texts_to_sequences(texts)
+X = pad_sequences(X, maxlen=500)
+# prepare the labels
+Y = pd.get_dummies(labels)
+file = open(data_folder + sep + "data_" + model_version + ".pkl", 'rb')
+X, Y, texts = pickle.load(file)
+file.close()
+# Split train an test sets
+X_train, X_test, Y_train, Y_test = train_test_split(
+    X, Y, test_size=0.1, shuffle=True)
+# train Word2Vec model on our data
+# word_model = gensim.models.Word2Vec.load(
+#     data_folder + sep + "word_model_" + model_version + ".save")
+model = load_model(data_folder + sep +
+                   "predict_model_" + model_version + ".save")
 
 app.config['JSON_AS_ASCII'] = False
 
@@ -173,3 +162,4 @@ def predict():
     # return a response in json format
     return flask.json.dumps(data, ensure_ascii=False)
 
+app.run()
