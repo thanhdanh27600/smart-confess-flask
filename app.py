@@ -4,7 +4,7 @@ import pickle
 import re
 
 import flask
-import gensim
+# import gensim
 import numpy as np
 import pandas as pd
 from keras.models import load_model
@@ -127,8 +127,8 @@ if __name__ == '__main__':
 
     # train Word2Vec model on our data
 
-    word_model = gensim.models.Word2Vec.load(
-        data_folder + sep + "word_model_" + model_version + ".save")
+    # word_model = gensim.models.Word2Vec.load(
+    #     data_folder + sep + "word_model_" + model_version + ".save")
     model = load_model(data_folder + sep +
                        "predict_model_" + model_version + ".save")
 
@@ -153,7 +153,6 @@ def predict():
     params = flask.request.json
 
     input_string = params['msg'].split('.')
-    print(input_string)
     X_dev = tokenizer.texts_to_sequences(preProcess(input_string))
     print(tokenizer.sequences_to_texts(X_dev))
     X_dev = pad_sequences(X_dev, maxlen=len(X_test[0]))
@@ -165,9 +164,6 @@ def predict():
         result_tag = Y_train.columns[np.argmax(prediction_cus[i])]
         result_prediction_dict[result_tag] = result_prediction_dict.get(
             result_tag, 0) + 1
-
-    # print(max(zip(result_prediction_dict.values(),
-    #               result_prediction_dict.keys()))[1])
 
     data["success"] = True
 
