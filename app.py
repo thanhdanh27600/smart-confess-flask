@@ -55,4 +55,4 @@ def predict():
 
 
 # start the flask app, allow remote connections
-app.run(host='localhost', debug=True)
+app.run(debug=True)
