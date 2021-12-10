@@ -7,8 +7,7 @@ import flask
 import gensim
 import numpy as np
 import pandas as pd
-from keras.layers import LSTM, Dense, Embedding
-from keras.models import Sequential, load_model
+from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
@@ -118,49 +117,20 @@ if __name__ == '__main__':
     # prepare the labels
     Y = pd.get_dummies(labels)
 
-    if enable_train_new_model:
-        # Save the new model
-        file = open(data_folder + sep + "data_" + model_version + ".pkl", 'wb')
-        pickle.dump([X, Y, texts], file)
-        file.close()
-    else:
-        file = open(data_folder + sep + "data_" + model_version + ".pkl", 'rb')
-        X, Y, texts = pickle.load(file)
-        file.close()
+    file = open(data_folder + sep + "data_" + model_version + ".pkl", 'rb')
+    X, Y, texts = pickle.load(file)
+    file.close()
 
     # Split train an test sets
     X_train, X_test, Y_train, Y_test = train_test_split(
         X, Y, test_size=0.1, shuffle=True)
 
     # train Word2Vec model on our data
-    if enable_train_new_model:
-        word_model = gensim.models.Word2Vec(
-            texts, vector_size=300, min_count=1, epochs=10)
-        word_model.save(data_folder + sep + "word_model_" +
-                        model_version + ".save")
 
-        embedding_matrix = np.zeros((len(word_model.wv) + 1, 300))
-        for i, vec in enumerate(word_model.wv.vectors):
-            embedding_matrix[i] = vec
-
-        model = Sequential()
-        model.add(Embedding(len(word_model.wv)+1, 300,
-                            input_length=X.shape[1], weights=[embedding_matrix], trainable=False))
-        model.add(LSTM(300, return_sequences=False))
-        model.add(Dense(Y.shape[1], activation="softmax"))
-        model.compile(optimizer="adam",
-                      loss="categorical_crossentropy", metrics=['acc'])
-
-        batch = 64
-        epochs = 1
-        model.fit(X_train, Y_train, batch, epochs)
-        model.save(data_folder + sep + "predict_model_" +
-                   model_version + ".save")
-    else:
-        word_model = gensim.models.Word2Vec.load(
-            data_folder + sep + "word_model_" + model_version + ".save")
-        model = load_model(data_folder + sep +
-                           "predict_model_" + model_version + ".save")
+    word_model = gensim.models.Word2Vec.load(
+        data_folder + sep + "word_model_" + model_version + ".save")
+    model = load_model(data_folder + sep +
+                       "predict_model_" + model_version + ".save")
 
     # Test model
     file = open(data_folder + sep + "My_data.txt", "r", encoding="utf8")
