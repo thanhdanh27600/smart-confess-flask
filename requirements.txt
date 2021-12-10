@@ -6,4 +6,6 @@ Flask==1.1.2
 gunicorn==19.9.0
 numpy==1.19.5
 pandas==1.2.0
+-f https://download.pytorch.org/whl/torch_stable.html
 torch==1.6.0+cpu
+torchvision==0.7.0+cpu
