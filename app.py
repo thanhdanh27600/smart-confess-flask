@@ -174,6 +174,3 @@ def predict():
 
     # return a response in json format
     return flask.json.dumps(data, ensure_ascii=False)
-
-
-app.run()
