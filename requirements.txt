@@ -1,7 +1,7 @@
-tensorflow-cpu==2.7.0
-underthesea==1.3.3
-keras==2.7.0
-Flask==2.0.2
-gunicorn==20.1.0
-pandas==1.2.5
-scikit-learn==1.0.1
+tensorflow-cpu
+underthesea
+keras
+Flask
+gunicorn
+pandas
+scikit-learn
