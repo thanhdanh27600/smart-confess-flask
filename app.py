@@ -29,7 +29,7 @@ CORS(app)
 
 
 sep = os.sep  # directory separator
-data_folder = "data2"  # folder that contains data and model
+data_folder = "data"  # folder that contains data and model
 data_file = "Data_final.csv"
 model_version = "final"
 
