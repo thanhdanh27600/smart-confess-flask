@@ -5,7 +5,7 @@ import re
 import sys
 from os import listdir
 
-import flask
+from flask import Flask
 import gensim
 # import gensim
 import numpy as np
@@ -22,7 +22,7 @@ from underthesea import word_tokenize
 
 from flask_cors import CORS
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 CORS(app)
 
 # ------------
