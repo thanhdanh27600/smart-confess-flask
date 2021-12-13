@@ -3,5 +3,3 @@ underthesea
 keras
 Flask
 gunicorn
-pandas
-scikit-learn
