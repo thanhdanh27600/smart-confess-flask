@@ -1,6 +1,7 @@
+tensorflow-cpu
 underthesea
 keras
 Flask
 gunicorn
 flask_cors
-pandas==1.2.0
+pandas
