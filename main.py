@@ -2,27 +2,18 @@
 import os
 import pickle
 import re
-import sys
-from os import listdir
 
-from flask import Flask
-import gensim
-# import gensim
+import flask
 import numpy as np
 import pandas as pd
-from keras.layers import LSTM, Dense, Embedding
-from keras.models import Sequential, load_model
+from flask_cors import CORS
+from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from underthesea import word_tokenize
 
-from flask_cors import CORS
-
-app = Flask(__name__)
+app = flask.Flask(__name__)
 CORS(app)
 
 # ------------
@@ -174,3 +165,12 @@ def predict():
 
     # return a response in json format
     return flask.json.dumps(data, ensure_ascii=False)
+
+
+if __name__ == '__main__':
+    # This is used when running locally only. When deploying to Google App
+    # Engine, a webserver process such as Gunicorn will serve the app. You
+    # can configure startup instructions by adding `entrypoint` to app.yaml.
+    app.run(host='127.0.0.1', port=8080, debug=True)
+# [END gae_python3_app]
+# [END gae_python38_app]

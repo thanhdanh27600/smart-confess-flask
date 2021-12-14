@@ -1,5 +1,5 @@
-tensorflow
 underthesea
 keras
 Flask
 gunicorn
+flask_cors
