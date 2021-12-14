@@ -1,12 +1,13 @@
-import gensim, re
+import gensim
+import re
 import numpy as np
 import pandas as pd
 import pickle
 from os import listdir
 
 from sklearn.model_selection import train_test_split
-from keras.preprocessing.text import Tokenizer, tokenizer_from_json
-from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 import sys
 import os
@@ -16,17 +17,20 @@ from keras.layers import LSTM, Dense, Embedding
 
 from underthesea import word_tokenize
 
-sep = os.sep # directory separator
-data_folder = "data" # folder that contains data and model
+sep = os.sep  # directory separator
+data_folder = "data"  # folder that contains data and model
 data_file = "Data_final.csv"
 model_version = "final"
 
-enable_train_new_model = True # Set this to False if you want to reuse an existing model with model_version
+# Set this to False if you want to reuse an existing model with model_version
+enable_train_new_model = True
 
-PAD_LEN = 500 # The maximum length of a sentence
+PAD_LEN = 500  # The maximum length of a sentence
 
 # Dictionary to scale the dataset for a more balanced dataset
-freq = dict({("#tìmngườiyêu", 3), ("#lcd", 3), ("#gópý", 18), ("#bócphốt", 10), ("#hỏiđáp", 2), ("#tìmbạn", 2), ("#tâmsự", 1), ("#chiasẻ", 1)})
+freq = dict({("#tìmngườiyêu", 3), ("#lcd", 3), ("#gópý", 18), ("#bócphốt", 10),
+             ("#hỏiđáp", 2), ("#tìmbạn", 2), ("#tâmsự", 1), ("#chiasẻ", 1)})
+
 
 def loadDataFromCSV():
     df = pd.read_csv(data_folder + sep + data_file)
@@ -34,6 +38,8 @@ def loadDataFromCSV():
     return df
 
 # Create a tokenizer to use later on
+
+
 def txtTokenizer(texts):
     # texts: A list of sentences
     tokenizer = Tokenizer()
@@ -45,6 +51,8 @@ def txtTokenizer(texts):
     return tokenizer, word_index
 
 # Remove trash symbols and spaces + Lower the case of all data
+
+
 def preProcess(sentences):
     # Split sentences according to ; * \n . ? !
     text = re.split('; |\*|\n|\.|\?|\!', sentences)
@@ -56,10 +64,13 @@ def preProcess(sentences):
     text = [word_tokenize(sentence, format="text") for sentence in text]
 
     # lowercase everything and remove all unnecessary spaces
-    text = [sentence.lower().strip().split() for sentence in text if sentence != '']
+    text = [sentence.lower().strip().split()
+            for sentence in text if sentence != '']
     return text
 
 # Pre-process tags to become lowercase and standardize them into 8 categories
+
+
 def preProcessTag(tag):
     temp = tag.lower().replace(" ", "")
     if "ngườiyêu" in temp:
@@ -83,6 +94,8 @@ def preProcessTag(tag):
 
 # load the data from the dataframe and do pre-processing to the sentences
 # in each confessions as well as labelling them
+
+
 def loadData(df):
     texts = []
     labels = []
@@ -97,6 +110,8 @@ def loadData(df):
     return texts, labels
 
 # Train an entirely new model and save it
+
+
 def trainData():
     dataframe = loadDataFromCSV()
     texts, labels = loadData(dataframe)
@@ -104,7 +119,8 @@ def trainData():
 
     # Save the tokenizer
     json_tokenizer = tokenizer.to_json()
-    json_file = open(data_folder + sep + "tokenizer_" + model_version + ".json", "w")
+    json_file = open(data_folder + sep + "tokenizer_" +
+                     model_version + ".json", "w")
     json_file.write(json_tokenizer)
     json_file.close()
 
@@ -117,36 +133,43 @@ def trainData():
 
     # Save the new model
     file = open(data_folder + sep + "data_" + model_version + ".pkl", 'wb')
-    pickle.dump([X,Y, texts],file)
+    pickle.dump([X, Y, texts], file)
     file.close()
 
     # Train Word2Vec model on our data
-    word_model = gensim.models.Word2Vec(texts, vector_size=300, min_count=1, epochs=10)
-    word_model.save(data_folder + sep + "word_model_" + model_version + ".save")
+    word_model = gensim.models.Word2Vec(
+        texts, vector_size=300, min_count=1, epochs=10)
+    word_model.save(data_folder + sep + "word_model_" +
+                    model_version + ".save")
 
     embedding_matrix = np.zeros((len(word_model.wv) + 1, 300))
     for i, vec in enumerate(word_model.wv.vectors):
         embedding_matrix[i] = vec
 
     # Split train an test sets
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, shuffle=True)
+    X_train, X_test, Y_train, Y_test = train_test_split(
+        X, Y, test_size=0.1, shuffle=True)
 
     model = Sequential()
-    model.add(Embedding(len(word_model.wv)+1,300,input_length=X.shape[1],weights=[embedding_matrix],trainable=False))
-    model.add(LSTM(300,return_sequences=False))
-    model.add(Dense(Y.shape[1],activation="softmax"))
+    model.add(Embedding(len(word_model.wv)+1, 300,
+                        input_length=X.shape[1], weights=[embedding_matrix], trainable=False))
+    model.add(LSTM(300, return_sequences=False))
+    model.add(Dense(Y.shape[1], activation="softmax"))
     model.summary()
-    model.compile(optimizer="adam",loss="categorical_crossentropy",metrics=['acc'])
+    model.compile(optimizer="adam",
+                  loss="categorical_crossentropy", metrics=['acc'])
 
     batch = 64
     epochs = 1
-    model.fit(X_train,Y_train,batch,epochs)
+    model.fit(X_train, Y_train, batch, epochs)
     model.save(data_folder + sep + "predict_model_" + model_version + ".save")
     model.evaluate(X_test, Y_test)
 
     return tokenizer, model, Y_train.columns
 
 # Reload all required data for reusing a model
+
+
 def reloadData():
     file = open(data_folder + sep + "tokenizer_" + model_version + ".json")
     tokenizer = tokenizer_from_json(file.read())
@@ -154,10 +177,13 @@ def reloadData():
     X, Y, texts = pickle.load(file)
     file.close()
     # Split train an test sets
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, shuffle=True)
+    X_train, X_test, Y_train, Y_test = train_test_split(
+        X, Y, test_size=0.1, shuffle=True)
     # word_model = gensim.models.Word2Vec.load(data_folder + sep + "word_model_" + model_version + ".save")
-    model = load_model(data_folder + sep + "predict_model_" + model_version + ".save")
+    model = load_model(data_folder + sep +
+                       "predict_model_" + model_version + ".save")
     return tokenizer, model, Y_train.columns
+
 
 def predictTag(tokenizer, model, labels):
     # Test model
@@ -171,9 +197,12 @@ def predictTag(tokenizer, model, labels):
     print(tokenizer.sequences_to_texts(X_dev))
     for i in range(len(prediction_cus)):
         result_tag = labels[np.argmax(prediction_cus[i])]
-        result_prediction_dict[result_tag] = result_prediction_dict.get(result_tag, 0) + 1
+        result_prediction_dict[result_tag] = result_prediction_dict.get(
+            result_tag, 0) + 1
     print(result_prediction_dict)
-    print(max(zip(result_prediction_dict.values(), result_prediction_dict.keys()))[1])
+    print(max(zip(result_prediction_dict.values(),
+                  result_prediction_dict.keys()))[1])
+
 
 if __name__ == '__main__':
     tokenizer = None
