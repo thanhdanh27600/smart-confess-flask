@@ -13,6 +13,7 @@
 # limitations under the License.
 
 runtime: python
+env: flex
 threadsafe: yes
 entrypoint: gunicorn -b :$PORT main:app
 
