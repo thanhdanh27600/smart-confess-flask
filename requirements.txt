@@ -3,3 +3,4 @@ keras
 Flask
 gunicorn
 flask_cors
+pandas
