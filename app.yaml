@@ -13,7 +13,6 @@
 # limitations under the License.
 
 runtime: python37
-threadsafe: yes
 entrypoint: gunicorn -b :$PORT main:app
 
 # This sample incurs costs to run on the App Engine flexible environment. 
