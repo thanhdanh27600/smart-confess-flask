@@ -113,8 +113,10 @@ def loadData(df):
 
 
 file = open(data_folder + sep + "tokenizer_" + model_version + ".json")
+print(file.read())
 tokenizer = tokenizer_from_json(file.read())
 file = open(data_folder + sep + "data_" + model_version + ".pkl", 'rb')
+print(file.read())
 X, Y, texts = pickle.load(file)
 file.close()
 # Split train an test sets
