@@ -7,9 +7,9 @@ import flask
 import numpy as np
 import pandas as pd
 from flask_cors import CORS
-from keras.models import load_model
-from keras.preprocessing.sequence import pad_sequences
-from keras.preprocessing.text import Tokenizer, tokenizer_from_json
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from sklearn.model_selection import train_test_split
 from underthesea import word_tokenize
 
