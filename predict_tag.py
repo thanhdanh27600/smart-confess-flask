@@ -12,8 +12,8 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import sys
 import os
 
-from keras.models import Sequential, load_model
-from keras.layers import LSTM, Dense, Embedding
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import LSTM, Dense, Embedding
 
 from underthesea import word_tokenize
 
