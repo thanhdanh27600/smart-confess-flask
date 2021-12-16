@@ -160,8 +160,8 @@ def predict():
 
     data["success"] = True
 
-    data["tags"] = max(zip(result_prediction_dict.values(),
-                           result_prediction_dict.keys()))[1]
+    data["tags"] = [(k, v) for k, v in sorted(
+        result_prediction_dict.items(), key=lambda item: item[1], reverse=True)]
 
     # return a response in json format
     return flask.json.dumps(data, ensure_ascii=False)
