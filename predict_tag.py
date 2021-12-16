@@ -160,7 +160,7 @@ def trainData():
                   loss="categorical_crossentropy", metrics=['acc'])
 
     batch = 64
-    epochs = 1
+    epochs = 10
     model.fit(X_train, Y_train, batch, epochs)
     model.save(data_folder + sep + "predict_model_" + model_version + ".save")
     model.evaluate(X_test, Y_test)
