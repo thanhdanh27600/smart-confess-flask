@@ -328,12 +328,9 @@ def predict():
     input_string = params['msg']
 
     X_dev = tokenizer.texts_to_sequences(preProcess(input_string))
-    print(X_dev)
+    # print(X_dev)
     X_dev = pad_sequences(X_dev, maxlen=PAD_LEN)
-
-    intermediate_layer_model = keras.Model(
-        inputs=model.input, outputs=model.get_layer(index=1).output)
-
+    
     print("Predicting...")
     result_prediction_dict = dict()
     prediction_cus = model.predict(X_dev, verbose=1)
@@ -360,8 +357,8 @@ def predict():
     idx, sim = findSimilar(corpus, input_string, 3)
 
     for i, index in enumerate(idx):
-        print('{}. index = {}, similarity = {}, document = {}'.format(
-            i+1, index, sim[index], corpus[index]))
+        # print('{}. index = {}, similarity = {}, document = {}'.format(
+        #     i+1, index, sim[index], corpus[index]))
         data["similar"].append(
             {'index': str(index), 'similarity': f"{sim[index]:.4f}", 'document': corpus[index]})
 
