@@ -1,1 +1,1 @@
-gunicorn -b :8080 main:app
+gunicorn -b :8080 main:app --daemon
