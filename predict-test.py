@@ -264,7 +264,7 @@ def trainData():
                   loss="categorical_crossentropy", metrics=['acc'])
 
     batch = 64  # mỗi lần train 64 data cùng lúc
-    epochs = 2  # train 20 lần
+    epochs = 20  # train 20 lần
     callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
     history = model.fit(X_train, Y_train, batch, epochs, callbacks=[callback])
 
