@@ -1,0 +1,15 @@
+@baseUrl2 = http://localhost:5000
+@baseUrl = https://api.phamthanhdanh.site/
+@endpoint_tags = predict
+
+# @name tagMsgWithGetHello
+GET {{baseUrl}}?msg=HelloWorld
+
+####
+# @name tagMsgWithPost
+POST {{baseUrl}}/{{endpoint_tags}}
+Content-Type: application/json
+
+{
+  "msg": "Chào em AK(087) cũng gần 3 năm bên nhau rồi. Cô gái nhỏ của anh, ngày mình bắt đầu quen nhau thì em chỉ là cô nhóc lớp 10 chuyên Văn, anh thì là một thằng lớp 12 chuyên Sinh, 2 môn chả liên quan gì nhau nhưng cơ duyên lại cho mình cơ hội gặp mặt rồi trở thành của nhau. 3 năm yêu nhau thì hết 2 năm là mình phải yêu xa rồi, bao nhiêu khó khăn, trắc trở, hiểu lầm, có lúc nghĩ là đã mất nhau rồi nhưng cuối cùng thì mình cùng nhau vượt qua hết. Nhớ những lần mình lén lúc đèo nhau đi chơi, những chuyến đi cả trăm cây số, dầm mưa đội nắng nhưng tràn đầy kỉ niệm của 2 đứa. Giờ đây, em đã là cô sinh viên nhỏ ngành Luật, khoảng cách địa lí không còn xa nữa, anh hy vọng mình sẽ cùng đồng hành thêm trên thật nhiều chặn đường nữa, hoàn thành mong muốn của cả 2 là cùng đèo nhau đi dọc đất nước. Ở gần hơn, anh cũng có nhiều cơ hội để chăm sóc cô nhóc của anh hơn. Có những lời anh không dám nói trực tiếp với em nhưng trong lòng anh, em sớm đã là người quan trọng bật nhất, không thể nào có thể thay thế được. Cảm ơn em vì gần 3 năm qua ở bên anh, một thằng con trai SPKT khô khan, trầm tính đến mức nhạt nhẽo."
+}
