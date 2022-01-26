@@ -40,6 +40,7 @@ enable_train_new_model = False
 
 PAD_LEN = 500  # The maximum length of a sentence
 
+
 def loadDataFromCSV():
     df = pd.read_csv(data_folder + sep + data_file)
     df['tag'] = df['tag'].fillna("#LCD")
@@ -309,10 +310,20 @@ def predict():
     input_string = params['msg']
 
     X_dev = tokenizer.texts_to_sequences(preProcess(input_string))
+    print(X_dev)
     X_dev = pad_sequences(X_dev, maxlen=PAD_LEN)
+
+    intermediate_layer_model = keras.Model(
+        inputs=model.input, outputs=model.get_layer(index=1).output)
+    print("-"*20)
+    intermediate_layer_model.summary()
+    print(intermediate_layer_model(X_dev))
+    print("-"*20)
+
     print("Predicting...")
     result_prediction_dict = dict()
     prediction_cus = model.predict(X_dev, verbose=1)
+    print(input_string)
     print(tokenizer.sequences_to_texts(X_dev))
     for i in range(len(prediction_cus)):
         result_tag = Y.columns[np.argmax(prediction_cus[i])]
@@ -321,7 +332,7 @@ def predict():
     print(result_prediction_dict)
     print(max(zip(result_prediction_dict.values(),
                   result_prediction_dict.keys()))[1])
-
+                  
     data["success"] = True
 
     data["tags"] = [(k, v) for k, v in sorted(

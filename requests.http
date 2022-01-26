@@ -1,5 +1,5 @@
-@baseUrl = http://localhost:8080
-@baseUrl2 = https://api.phamthanhdanh.site/
+@baseUrl2 = http://localhost:8080
+@baseUrl = https://api.phamthanhdanh.site/
 @endpoint_tags = predict
 
 # @name tagMsgWithGetHello
