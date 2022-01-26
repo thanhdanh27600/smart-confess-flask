@@ -7,7 +7,7 @@ GET {{baseUrl}}?msg=HelloWorld
 
 ####
 # @name tagMsgWithPost
-POST {{baseUrl}}/{{endpoint_tags}}
+POST {{baseUrl2}}/{{endpoint_tags}}
 Content-Type: application/json
 
 {

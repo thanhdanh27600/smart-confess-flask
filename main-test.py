@@ -33,7 +33,7 @@ app.config['JSON_AS_ASCII'] = False
 # ------------
 
 sep = os.sep  # directory separator
-PRODUCTION = 1
+PRODUCTION = 0
 # folder that contains data and model
 data_folder = "data_test_server" if PRODUCTION == 1 else "data_test"
 data_file = "Data_final.csv"
@@ -307,7 +307,8 @@ model.summary()
 # ----------
 
 df = loadDataFromCSV()
-corpus = loadData(df)["Texts"].tolist()
+corpus = df["content"].tolist()
+code = df["code"].tolist()
 
 # ----------
 
@@ -330,7 +331,7 @@ def predict():
     X_dev = tokenizer.texts_to_sequences(preProcess(input_string))
     # print(X_dev)
     X_dev = pad_sequences(X_dev, maxlen=PAD_LEN)
-    
+
     print("Predicting...")
     result_prediction_dict = dict()
     prediction_cus = model.predict(X_dev, verbose=1)
@@ -360,7 +361,7 @@ def predict():
         # print('{}. index = {}, similarity = {}, document = {}'.format(
         #     i+1, index, sim[index], corpus[index]))
         data["similar"].append(
-            {'index': str(index), 'similarity': f"{sim[index]:.4f}", 'document': corpus[index]})
+            {'index': str(code[index]), 'similarity': f"{sim[index]:.4f}", 'document': corpus[index]})
 
     ##
     # End find similar
