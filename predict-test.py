@@ -26,7 +26,7 @@ from googletrans import Translator, constants
 import math
 
 sep = os.sep  # directory separator
-data_folder = "data_server"  # folder that contains data and model
+data_folder = "data_test_server"  # folder that contains data and model
 data_file = "Data_final.csv"
 model_version = "test_switch_oversampling_spliting_5"
 
