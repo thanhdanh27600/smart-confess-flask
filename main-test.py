@@ -30,7 +30,6 @@ CORS(app)
 
 # ------------
 
-
 sep = os.sep  # directory separator
 data_folder = "data_test_server"  # folder that contains data and model
 data_file = "Data_final.csv"
@@ -40,11 +39,6 @@ model_version = "test_switch_oversampling_spliting_5"
 enable_train_new_model = False
 
 PAD_LEN = 500  # The maximum length of a sentence
-
-# Dictionary to scale the dataset for a more balanced dataset
-freq = dict({("#tìmngườiyêu", 3), ("#lcd", 3), ("#gópý", 18), ("#bócphốt", 10),
-             ("#hỏiđáp", 2), ("#tìmbạn", 2), ("#tâmsự", 1), ("#chiasẻ", 1)})
-
 
 def loadDataFromCSV():
     df = pd.read_csv(data_folder + sep + data_file)
