@@ -19,6 +19,8 @@ from keras.layers import LSTM, Dense, Embedding
 from keras.models import Sequential, load_model
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer, tokenizer_from_json
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -27,11 +29,13 @@ from underthesea import word_tokenize
 
 app = flask.Flask(__name__)
 CORS(app)
-
+app.config['JSON_AS_ASCII'] = False
 # ------------
 
 sep = os.sep  # directory separator
-data_folder = "data_test_server"  # folder that contains data and model
+PRODUCTION = 1
+# folder that contains data and model
+data_folder = "data_test_server" if PRODUCTION == 1 else "data_test"
 data_file = "Data_final.csv"
 model_version = "test_switch_oversampling_spliting_5"
 
@@ -279,6 +283,17 @@ def trainData():
     return tokenizer, model, Y_train.columns
 
 
+def findSimilar(corpus, document, n=4):
+    vectorizer = TfidfVectorizer(token_pattern=r"(?u)\b\w+\b")
+    X = vectorizer.fit_transform(corpus).toarray()
+    Y = vectorizer.transform([document]).toarray()
+    cos_sim = cosine_similarity(Y.reshape(1, -1), X)[0]
+    idx_of_n_max_similarity = np.argsort(cos_sim)[::-1][:n]
+    # n max similarity
+    # print(cos_sim[idx_of_n_max_similarity])
+    return idx_of_n_max_similarity, cos_sim
+
+
 # Reload all required data for reusing a model
 file = open(data_folder + sep + "tokenizer_" + model_version + ".json")
 tokenizer = tokenizer_from_json(file.read())
@@ -291,7 +306,10 @@ model.summary()
 
 # ----------
 
-app.config['JSON_AS_ASCII'] = False
+df = loadDataFromCSV()
+corpus = loadData(df)["Texts"].tolist()
+
+# ----------
 
 
 @app.route("/", methods=["GET"])
@@ -315,10 +333,6 @@ def predict():
 
     intermediate_layer_model = keras.Model(
         inputs=model.input, outputs=model.get_layer(index=1).output)
-    print("-"*20)
-    intermediate_layer_model.summary()
-    print(intermediate_layer_model(X_dev))
-    print("-"*20)
 
     print("Predicting...")
     result_prediction_dict = dict()
@@ -332,11 +346,28 @@ def predict():
     print(result_prediction_dict)
     print(max(zip(result_prediction_dict.values(),
                   result_prediction_dict.keys()))[1])
-                  
+
     data["success"] = True
 
     data["tags"] = [(k, v) for k, v in sorted(
         result_prediction_dict.items(), key=lambda item: item[1], reverse=True)]
+
+    ##
+    # Find similar
+    # #
+    data["similar"] = []
+
+    idx, sim = findSimilar(corpus, input_string, 3)
+
+    for i, index in enumerate(idx):
+        print('{}. index = {}, similarity = {}, document = {}'.format(
+            i+1, index, sim[index], corpus[index]))
+        data["similar"].append(
+            {'index': str(index), 'similarity': f"{sim[index]:.4f}", 'document': corpus[index]})
+
+    ##
+    # End find similar
+    # #
 
     # return a response in json format
     return flask.json.dumps(data, ensure_ascii=False)
