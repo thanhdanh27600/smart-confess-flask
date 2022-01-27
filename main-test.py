@@ -35,7 +35,7 @@ app.config['JSON_AS_ASCII'] = False
 sep = os.sep  # directory separator
 PRODUCTION = 1
 # folder that contains data and model
-data_folder = "data_test_server" if PRODUCTION == 1 else "data_test"
+data_folder = "data_server" if PRODUCTION == 1 else "data_test"
 data_file = "Data_final.csv"
 model_version = "test_switch_oversampling_spliting_5"
 
