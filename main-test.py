@@ -363,7 +363,7 @@ def predict():
         # print('{}. index = {}, similarity = {}, document = {}'.format(
         #     i+1, index, sim[index], corpus[index]))
         data["similar"].append(
-            {'index': str(code[index]), 'similarity': f"{sim[index]:.4f}", 'document': corpus[index]})
+            {'index': str(code[index]), 'similarity': f"{sim[index]:.4f}", 'document': df.iloc[index, 1]})
 
     ##
     # End find similar
