@@ -307,7 +307,8 @@ model.summary()
 # ----------
 
 df = loadDataFromCSV()
-corpus = df["content"].tolist()
+corpus = [word_tokenize(i, format="text").lower()
+          for i in df["content"].tolist()]
 code = df["code"].tolist()
 
 # ----------
@@ -355,8 +356,8 @@ def predict():
     # #
     data["similar"] = []
 
-    # post = word_tokenize(input_string, format="text").lower()
-    idx, sim = findSimilar(corpus, input_string, 3)
+    post = word_tokenize(input_string, format="text").lower()
+    idx, sim = findSimilar(corpus, post, 3)
 
     for i, index in enumerate(idx):
         # print('{}. index = {}, similarity = {}, document = {}'.format(
