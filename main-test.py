@@ -274,7 +274,7 @@ def trainData():
 
     batch = 64  # mỗi lần train 64 data cùng lúc
     epochs = 2  # train 20 lần
-    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
+    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=7)
     history = model.fit(X_train, Y_train, batch, epochs, callbacks=[callback])
 
     model.save(data_folder + sep + "predict_model_" + model_version + ".save")
@@ -355,7 +355,8 @@ def predict():
     # #
     data["similar"] = []
 
-    idx, sim = findSimilar(corpus, input_string, 3)
+    post = word_tokenize(input_string, format="text").lower()
+    idx, sim = findSimilar(corpus, post, 3)
 
     for i, index in enumerate(idx):
         # print('{}. index = {}, similarity = {}, document = {}'.format(

@@ -265,7 +265,7 @@ def trainData():
 
     batch = 64  # mỗi lần train 64 data cùng lúc
     epochs = 50  # train 20 lần
-    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
+    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=7)
     history = model.fit(X_train, Y_train, batch, epochs, callbacks=[callback])
 
     model.save(data_folder + sep + "predict_model_" + model_version + ".save")
