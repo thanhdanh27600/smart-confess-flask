@@ -236,7 +236,7 @@ def trainData():
     # Train Word2Vec model on our data
     print("Training Word2Vec...")
     word_model = gensim.models.Word2Vec(texts_labels_dummy_df.loc[:, "Texts"].tolist(
-    ), vector_size=300, min_count=1, epochs=20)
+    ), vector_size=300, min_count=1, epochs=50)
     word_model.save(data_folder + sep + "word_model_" +
                     model_version + ".save")
 
@@ -264,7 +264,7 @@ def trainData():
                   loss="categorical_crossentropy", metrics=['acc'])
 
     batch = 64  # mỗi lần train 64 data cùng lúc
-    epochs = 20  # train 20 lần
+    epochs = 50  # train 20 lần
     callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
     history = model.fit(X_train, Y_train, batch, epochs, callbacks=[callback])
 
