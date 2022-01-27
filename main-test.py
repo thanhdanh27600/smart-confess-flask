@@ -356,7 +356,7 @@ def predict():
     data["similar"] = []
 
     # post = word_tokenize(input_string, format="text").lower()
-    idx, sim = findSimilar(corpus, post, 3)
+    idx, sim = findSimilar(corpus, input_string, 3)
 
     for i, index in enumerate(idx):
         # print('{}. index = {}, similarity = {}, document = {}'.format(
