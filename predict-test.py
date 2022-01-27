@@ -26,7 +26,7 @@ from googletrans import Translator, constants
 import math
 
 sep = os.sep  # directory separator
-data_folder = "data_test_server"  # folder that contains data and model
+data_folder = "data_server"  # folder that contains data and model
 data_file = "Data_final.csv"
 model_version = "test_switch_oversampling_spliting_5"
 
@@ -264,7 +264,7 @@ def trainData():
                   loss="categorical_crossentropy", metrics=['acc'])
 
     batch = 64  # mỗi lần train 64 data cùng lúc
-    epochs = 5  # train 20 lần
+    epochs = 30  # train 20 lần
     callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=7)
     history = model.fit(X_train, Y_train, batch, epochs, callbacks=[callback])
 
