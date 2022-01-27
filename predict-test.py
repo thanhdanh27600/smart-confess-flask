@@ -236,7 +236,7 @@ def trainData():
     # Train Word2Vec model on our data
     print("Training Word2Vec...")
     word_model = gensim.models.Word2Vec(texts_labels_dummy_df.loc[:, "Texts"].tolist(
-    ), vector_size=300, min_count=1, epochs=50)
+    ), vector_size=300, min_count=1, epochs=20)
     word_model.save(data_folder + sep + "word_model_" +
                     model_version + ".save")
 
